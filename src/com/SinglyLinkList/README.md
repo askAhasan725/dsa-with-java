@@ -1,83 +1,172 @@
-# Singly Linked List: Terminology & Methods Reference
+# Singly Linked List: Methods, Implementation & Reference Guide
 
-## Core Terminology
-* **Node**: A basic building block containing two parts: `data` (the value) and `next` (reference to the next node).
-* **Head**: The pointer/reference variable storing the address of the very first node in the list.
-* **Tail**: The final node in the list whose `next` pointer is set to `null`.
-* **Traversal**: The process of visiting each node sequentially from the head to the tail.
-* **Null/None Pointer**: Indicates the end of the linked list.
+This document provides a comprehensive overview of the `App` (Singly Linked List) class methods, step-by-step logic breakdowns, and suggested methods to build a production-grade data structure.
 
 ---
 
-## Complete Methods & Operations
+## 1. Summary Table of Existing Methods
 
-### 1. `insertAtBeginning(data)` / `prepend(data)`
-* **What it does**: Adds a brand new node right at the start of the list.
-* **How it works**: 
-  1. Create a new node with the input data.
-  2. Set the new node's `next` pointer to current `head`.
-  3. Reassign `head` to point to the new node.
-* **Time Complexity**: $O(1)$
+The following table summarizes all methods currently implemented in `com.SinglyLinkList.App`:
 
-### 2. `insertAtEnd(data)` / `append(data)`
-* **What it does**: Adds a new node at the very end of the list.
-* **How it works**:
-  1. Create a new node.
-  2. If the list is empty (`head == null`), make the new node the `head`.
-  3. Else, traverse starting from `head` until reaching the last node (`node.next == null`).
-  4. Set the last node's `next` pointer to the new node.
-* **Time Complexity**: $O(n)$
+| Method | Signature | Return Type | Time Complexity | Description / Use Case |
+| :--- | :--- | :--- | :--- | :--- |
+| **Constructor** | `App()` | `void` | $\mathcal{O}(1)$ | Initializes an empty linked list with `head = null`, `tail = null`, and `size = 0`. |
+| **`size()`** | `public int size()` | `int` | $\mathcal{O}(1)$ | Returns the total count of elements currently present in the list. |
+| **`isEmpty()`** | `public boolean isEmpty()` | `boolean` | $\mathcal{O}(1)$ | Checks whether the list contains zero elements. Returns `true` if empty, `false` otherwise. |
+| **`first()`** | `public int first() throws IllegalStateException` | `int` | $\mathcal{O}(1)$ | Retrieves the value of the head node without removing it. Throws an exception if empty. |
+| **`last()`** | `public int last() throws IllegalStateException` | `int` | $\mathcal{O}(1)$ | Retrieves the value of the tail node without removing it. Throws an exception if empty. |
+| **`addFirst()`** | `public void addFirst(int element)` | `void` | $\mathcal{O}(1)$ | Inserts a new node containing `element` at the beginning (front) of the list. |
+| **`addLast()`** | `public void addLast(int element)` | `void` | $\mathcal{O}(1)$ | Appends a new node containing `element` at the end (tail) of the list. |
+| **`add()`** | `public void add(int element, int index)` | `void` | $\mathcal{O}(n)$ | Inserts a new node with `element` immediately after the node at position `index`. |
+| **`removeFirst()`** | `public void removeFirst() throws IllegalStateException` | `void` | $\mathcal{O}(1)$ | Removes the first node (head) from the list. Throws an exception if empty. |
+| **`showList()`** | `public void showList() throws IllegalStateException` | `void` | $\mathcal{O}(n)$ | Iterates through all nodes starting from `head` and prints their values separated by tabs. |
 
-### 3. `insertAfter(targetNode, data)`
-* **What it does**: Inserts a new node immediately after a specified target node.
-* **How it works**:
-  1. Create a new node.
-  2. Set the new node's `next` to `targetNode.next`.
-  3. Set `targetNode.next` to the new node.
-* **Time Complexity**: $O(1)$ (if target node reference is given)
+---
 
-### 4. `deleteFromBeginning()` / `removeFirst()`
-* **What it does**: Removes the first node (head) from the list.
-* **How it works**:
-  1. Check if the list is empty (`head == null`).
-  2. Reassign `head` to `head.next`.
-  3. Clear or let garbage collection clear the old head node.
-* **Time Complexity**: $O(1)$
+## 2. Detailed Method Explanations & Logic
 
-### 5. `deleteFromEnd()` / `removeLast()`
-* **What it does**: Removes the final node of the list.
-* **How it works**:
-  1. If the list is empty or has only one node, handle it by setting `head = null`.
-  2. Traverse until the second-to-last node (where `node.next.next == null`).
-  3. Set `node.next = null`.
-* **Time Complexity**: $O(n)$
+### 2.1. `addFirst(int element)`
+* **Concept:** Inserts an item at the beginning of the chain.
+* **Algorithm:**
+  1. Create a new `Node` whose `next` reference points to the existing `head`.
+  2. Point `head` to this newly created node.
+  3. If the list was previously empty (`size == 0`), the new node also becomes the `tail`.
+  4. Increment `size`.
+* **Diagram:**
+  ```text
+  Before:  head -> [ A ] -> [ B ] -> null
+  Action:  newNode.next = head
+           head = newNode
+  After:   head -> [ NEW ] -> [ A ] -> [ B ] -> null
+  ```
 
-### 6. `deleteByValue(key)` / `remove(key)`
-* **What it does**: Deletes the first node containing a specific matchable data value.
-* **How it works**:
-  1. Search for the target value while keeping track of the previous node.
-  2. When found, bypass the target node by setting `prev.next = current.next`.
-* **Time Complexity**: $O(n)$
+---
 
-### 7. `search(key)` / `find(key)`
-* **What it does**: Checks whether a specified value exists within the list.
-* **How it works**:
-  1. Initialize a pointer at `head`.
-  2. Loop through nodes (`ptr != null`), checking `ptr.data == key`.
-  3. Return node/boolean if found, or `null` if the end is reached.
-* **Time Complexity**: $O(n)$
+### 2.2. `addLast(int element)`
+* **Concept:** Appends an item to the end of the chain.
+* **Algorithm:**
+  1. Create a new `Node` whose `next` is `null`.
+  2. If the list is empty (`size == 0`), both `head` and `tail` point to the new node.
+  3. Otherwise, set the current `tail.next = tailN`, and then update `tail = tailN`.
+  4. Increment `size`.
+* **Diagram:**
+  ```text
+  Before:  head -> [ A ] -> [ B (tail) ] -> null
+  Action:  tail.next = newNode
+           tail = newNode
+  After:   head -> [ A ] -> [ B ] -> [ NEW (tail) ] -> null
+  ```
 
-### 8. `traverse()` / `display()`
-* **What it does**: Prints or visits all elements sequentially.
-* **How it works**:
-  1. Start at `head`.
-  2. Read/print node data and step forward: `ptr = ptr.next` until `ptr == null`.
-* **Time Complexity**: $O(n)$
+---
 
-### 9. `reverse()`
-* **What it does**: Flips the direction of the entire linked list so the tail becomes the head.
-* **How it works**:
-  1. Maintain three pointers: `prev = null`, `current = head`, and `next = null`.
-  2. Loop through the list, saving `next = current.next`, changing `current.next = prev`, then shifting `prev = current` and `current = next`.
-  3. Set `head = prev` at the end.
-* **Time Complexity**: $O(n)$
+### 2.3. `add(int element, int index)`
+* **Concept:** Inserts an item in between nodes (specifically after index `index`).
+* **Algorithm:**
+  1. Start a traversal pointer `temp` at `head`.
+  2. Advance `temp` forward `index` times to find the preceding node.
+  3. Instantiate `new Node(element, temp.getNext())`.
+  4. Link `temp.setNext(newest)`.
+  5. Increment `size`.
+* **Note on Edge Cases:** If `index == 0`, adding before head is equivalent to `addFirst`. If inserting at the very end, `tail` should also be updated.
+
+---
+
+### 2.4. `removeFirst()`
+* **Concept:** Detaches the first node, allowing the Garbage Collector to free its memory.
+* **Algorithm:**
+  1. Guard against empty list: throw `IllegalStateException` if `isEmpty()`.
+  2. Advance `head` to `head.getNext()`.
+  3. Decrement `size`.
+  4. If `size == 0`, reset `tail = null`.
+
+---
+
+### 2.5. `showList()`
+* **Concept:** Traverses the linked list sequentially.
+* **Algorithm:**
+  1. Check if the list is empty.
+  2. Set `temp = head`.
+  3. Loop while `temp != null` (or across `size` steps), printing `temp.getElement()` and updating `temp = temp.getNext()`.
+
+---
+
+## 3. Suggested Additional Methods Table
+
+To make your Singly Linked List robust, complete, and standard across data structure libraries (like Java's `java.util.LinkedList`), consider adding the following methods:
+
+| Method | Proposed Signature | Return Type | Time Complexity | Functionality & Practical Work |
+| :--- | :--- | :--- | :--- | :--- |
+| **`removeLast()`** | `public int removeLast()` | `int` | $\mathcal{O}(n)$ | Removes and returns the last element. Requires traversing to the second-to-last node to update `tail`. |
+| **`removeAt()`** | `public int removeAt(int index)` | `int` | $\mathcal{O}(n)$ | Removes the node at a specific index and relinks the surrounding nodes. |
+| **`get()`** | `public int get(int index)` | `int` | $\mathcal{O}(n)$ | Returns the element stored at a given 0-based index without modifying the list. |
+| **`set()`** | `public void set(int index, int val)` | `void` | $\mathcal{O}(n)$ | Replaces the value stored at `index` with a new value `val`. |
+| **`contains()`** | `public boolean contains(int val)` | `boolean` | $\mathcal{O}(n)$ | Linear search: returns `true` if `val` exists in the list, `false` otherwise. |
+| **`indexOf()`** | `public int indexOf(int val)` | `int` | $\mathcal{O}(n)$ | Returns the index of the first occurrence of `val`, or `-1` if not found. |
+| **`reverse()`** | `public void reverse()` | `void` | $\mathcal{O}(n)$ | In-place reverses the entire linked list by flipping the direction of all `next` pointers. |
+| **`clear()`** | `public void clear()` | `void` | $\mathcal{O}(1)$ | Resets `head = null`, `tail = null`, and `size = 0`, discarding all nodes. |
+| **`toArray()`** | `public int[] toArray()` | `int[]` | $\mathcal{O}(n)$ | Converts the linked list into a standard primitive `int[]` array. |
+
+---
+
+## 4. Implementation Code for Suggested Methods
+
+Here is ready-to-use Java code implementing the most requested enhancements:
+
+```java
+package com.SinglyLinkList;
+
+public class AppExtended extends App {
+
+    // 1. Remove Last Node
+    public int removeLast() {
+        if (isEmpty()) throw new IllegalStateException("List is empty");
+        
+        int val = last();
+        if (size() == 1) {
+            removeFirst();
+            return val;
+        }
+        
+        Node temp = head;
+        while (temp.getNext() != tail) {
+            temp = temp.getNext();
+        }
+        temp.setNext(null);
+        tail = temp;
+        size--;
+        return val;
+    }
+
+    // 2. Contains Search
+    public boolean contains(int target) {
+        Node temp = head;
+        while (temp != null) {
+            if (temp.getElement() == target) return true;
+            temp = temp.getNext();
+        }
+        return false;
+    }
+
+    // 3. In-Place Reversal
+    public void reverse() {
+        Node prev = null;
+        Node curr = head;
+        tail = head; // Current head will become the new tail
+        
+        while (curr != null) {
+            Node nextTemp = curr.getNext();
+            curr.setNext(prev);
+            prev = curr;
+            curr = nextTemp;
+        }
+        head = prev;
+    }
+
+    // 4. Clear List
+    public void clear() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+}
+```
