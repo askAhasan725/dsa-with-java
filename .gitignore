@@ -1,0 +1,6 @@
+.vscode
+lib
+bin
+desktop.ini
+*.class
+tempCodeRunnerFile.*

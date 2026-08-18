@@ -1,6 +1,6 @@
 import com.Stack.StackApp;
 
-public class App {
+public class Stack {
     public static void main(String[] args) throws Exception {
         StackApp s = new StackApp(5);
 
