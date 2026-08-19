@@ -20,6 +20,10 @@ public class App {
         return false;
     }
 
+    public Node firstNode(){
+        return head;
+    }
+
     //Get head & tail
     public int first() throws IllegalStateException{
         if(isEmpty())
@@ -83,5 +87,19 @@ public class App {
             temp = temp.getNext();
         }
         System.out.println();
+    }
+
+    public App reverse(App obj){
+        App rev = new App();
+        Node start = obj.firstNode();
+        if(start==null)
+            return rev;
+
+        Node current = start;
+        for(int i=0; i<size; i++){
+            rev.addFirst(current.getElement());
+            current = current.getNext();
+        }
+        return rev;
     }
 }

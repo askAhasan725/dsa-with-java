@@ -4,9 +4,13 @@ public class SinglyLinkList {
     public static void main(String[] args) {
         App app = new App();
         
-        app.addFirst(5);
-        app.addFirst(6);
-        app.addLast(9);
+        app.addFirst(2);
+        app.addFirst(1);
+        app.addLast(3);
+        app.addLast(4);
+        app.addLast(5);
         app.showList();
+        App a = app.reverse(app);
+        a.showList();
     }
 }
